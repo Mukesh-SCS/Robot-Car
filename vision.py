@@ -1,4 +1,4 @@
-# vision.py (optional)
+# vision.py
 
 import cv2
 # Placeholder imports for inference
