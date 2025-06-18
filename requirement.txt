@@ -1,0 +1,5 @@
+Rpi.GPIO
+gpiozero
+numpy
+opencv-python
+picamera2
