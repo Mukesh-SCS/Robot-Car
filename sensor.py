@@ -3,10 +3,12 @@
 import RPi.GPIO as GPIO
 import time
 
-# Ultrasonic sensor pins\NTRIG = 23  # Trigger pin
+# Ultrasonic sensor pins
+TRIG = 23  # Trigger pin
 ECHO = 24  # Echo pin
 
-# Servo pin\SERVO_PIN = 18\N
+# Servo pin
+SERVO_PIN = 18
 # Servo PWM frequency
 FREQ = 50
 

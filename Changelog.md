@@ -12,3 +12,6 @@
 ### Added
 - [Robot-Car-2025]  Added the code for the motor, sensor, controller and vision.
    
+## [1.0.2] - 2025-06-18
+### Fixed
+- [Robot-Car-2025]  fixed  the code for sensor.py for triger pin.
