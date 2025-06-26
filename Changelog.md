@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 - Placeholder for upcoming features and changes.
 
 ---
+## [1.0.3] - 2025-06-26
+### Added
+- Add the `chatgpt_client.py` LLM model and intergate the Openai for camera.
+- Updated the `controller.py`
 
 ## [1.0.2] - 2025-06-18
 ### Fixed
@@ -20,7 +24,3 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial commit for project structure.
 
-## [1.0.1] - 2025-06-26
-### Added
-- Add the `chatgpt_client.py` LLM model and intergate the Openai for camera.
-- Updated the `controller.py`
