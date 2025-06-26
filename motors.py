@@ -1,5 +1,3 @@
-# motors.py
-
 import RPi.GPIO as GPIO
 
 # Motor pin definitions
@@ -13,14 +11,11 @@ IN4 = 21  # Direction pin 2 for right motor
 # PWM frequency (Hz)
 FREQ = 1000
 
-# Global PWM objects
+# PWM objects
 pwm_left = None
 pwm_right = None
 
 def setup():
-    """
-    Initialize GPIO pins and PWM for motors.
-    """
     GPIO.setmode(GPIO.BCM)
     GPIO.setup((IN1, IN2, IN3, IN4), GPIO.OUT, initial=GPIO.LOW)
     GPIO.setup((ENA, ENB), GPIO.OUT)
@@ -32,23 +27,35 @@ def setup():
 
 
 def drive(speed: int = 50):
-    """
-    Drive both motors forward at the given speed (0-100%).
-    """
-    # Set direction pins for forward motion
     GPIO.output(IN1, GPIO.HIGH)
     GPIO.output(IN2, GPIO.LOW)
     GPIO.output(IN3, GPIO.HIGH)
     GPIO.output(IN4, GPIO.LOW)
-    # Apply PWM duty cycle
+    pwm_left.ChangeDutyCycle(speed)
+    pwm_right.ChangeDutyCycle(speed)
+
+
+def turn_left(speed: int = 50):
+    # Pivot left
+    GPIO.output(IN1, GPIO.LOW)
+    GPIO.output(IN2, GPIO.HIGH)
+    GPIO.output(IN3, GPIO.HIGH)
+    GPIO.output(IN4, GPIO.LOW)
+    pwm_left.ChangeDutyCycle(speed)
+    pwm_right.ChangeDutyCycle(speed)
+
+
+def turn_right(speed: int = 50):
+    # Pivot right
+    GPIO.output(IN1, GPIO.HIGH)
+    GPIO.output(IN2, GPIO.LOW)
+    GPIO.output(IN3, GPIO.LOW)
+    GPIO.output(IN4, GPIO.HIGH)
     pwm_left.ChangeDutyCycle(speed)
     pwm_right.ChangeDutyCycle(speed)
 
 
 def stop():
-    """
-    Stop both motors.
-    """
     if pwm_left:
         pwm_left.ChangeDutyCycle(0)
     if pwm_right:
@@ -56,9 +63,6 @@ def stop():
 
 
 def cleanup():
-    """
-    Stop PWM and clean up GPIO.
-    """
     if pwm_left:
         pwm_left.stop()
     if pwm_right:

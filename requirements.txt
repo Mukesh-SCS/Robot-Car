@@ -1,5 +1,8 @@
-Rpi.GPIO
+RPi.GPIO
 gpiozero
-numpy
-opencv-python
 picamera2
+opencv-python
+numpy
+pandas
+h5py
+openai

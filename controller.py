@@ -7,6 +7,7 @@ SAFE_DISTANCE = 20
 PAN_ANGLES = [60, 90, 120]
 DRIVE_SPEED = 70
 
+
 def main():
     motors.setup()
     sensor.setup()
@@ -17,36 +18,40 @@ def main():
             distances = []
             for ang in PAN_ANGLES:
                 sensor.set_servo(ang)
-                time.sleep(0.05)  # Small delay for servo to reach position
-                distances.append(sensor.get_distance())
+                time.sleep(0.1)
+                dist = sensor.get_distance()
+                print(f"Angle {ang}: {dist:.1f} cm")
+                distances.append(dist)
+
             mind = min(distances)
             if mind < SAFE_DISTANCE:
+                print(f"Obstacle at {mind:.1f} cm detected. Stopping.")
                 motors.stop()
-                # --- Ask GPT what to do next ---
+                # Ask GPT for next action
                 prompt = (
-                    f"I have an obstacle at {mind:.1f} cm in front of me. "
-                    "Should I turn left, right, or wait? "
-                    "Reply with one of: TURN_LEFT, TURN_RIGHT, WAIT."
+                    f"I have an obstacle at {mind:.1f} cm ahead. "
+                    "Should I TURN_LEFT, TURN_RIGHT, or WAIT?"
                 )
-                cmd = gpt.ask_gpt(prompt)
+                cmd = gpt.ask_gpt(prompt).upper()
                 print("GPT suggests:", cmd)
                 if "TURN_LEFT" in cmd:
-                    # Example: turn left in place
                     motors.turn_left(DRIVE_SPEED)
-                    time.sleep(0.5)
-                    motors.stop()
                 elif "TURN_RIGHT" in cmd:
                     motors.turn_right(DRIVE_SPEED)
-                    time.sleep(0.5)
-                    motors.stop()
                 else:
-                    time.sleep(1)
-                # Resume driving forward
+                    print("Waiting...")
+                time.sleep(0.5)
+                motors.stop()
+                time.sleep(0.2)
                 motors.drive(DRIVE_SPEED)
-            time.sleep(0.1)
 
+            time.sleep(0.1)
     except KeyboardInterrupt:
-        pass
+        print("Interrupted by user.")
     finally:
         motors.cleanup()
         sensor.cleanup()
+
+
+if __name__ == "__main__":
+    main()

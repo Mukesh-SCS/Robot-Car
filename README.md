@@ -67,6 +67,13 @@ python3 vision.py
 - Always activate your virtual environment before running or installing Python packages.
 
 ---
+### Script
+deactivate
+rm -rf venv
+python3 -m venv venv --system-site-packages
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
 
 # Real Data Collecting
 
