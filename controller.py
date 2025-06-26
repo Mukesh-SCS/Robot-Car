@@ -1,53 +1,52 @@
-# controller.py
 import time
 import motors
 import sensor
+import chatgpt_client as gpt
 
-# Configuration parameters
-SAFE_DISTANCE = 20       # cm
-PAN_ANGLES = [60, 90, 120]  # degrees for sweeping
-DRIVE_SPEED = 70         # percentage PWM
-
+SAFE_DISTANCE = 20
+PAN_ANGLES = [60, 90, 120]
+DRIVE_SPEED = 70
 
 def main():
-    """
-    Main loop: drive forward and stop on obstacle detection.
-    """
     motors.setup()
     sensor.setup()
     try:
-        print("Starting autonomous drive...")
+        print("Starting autonomous drive…")
         motors.drive(DRIVE_SPEED)
         while True:
-            # Sweep ultrasonic sensor and collect distances
             distances = []
-            for angle in PAN_ANGLES:
-                sensor.set_servo(angle)
-                d = sensor.get_distance()
-                distances.append(d)
-            min_dist = min(distances)
-            print(f"Distances: {', '.join(f'{d:.1f}' for d in distances)} cm")
-
-            if min_dist < SAFE_DISTANCE:
-                print("Obstacle detected! Stopping.")
+            for ang in PAN_ANGLES:
+                sensor.set_servo(ang)
+                time.sleep(0.05)  # Small delay for servo to reach position
+                distances.append(sensor.get_distance())
+            mind = min(distances)
+            if mind < SAFE_DISTANCE:
                 motors.stop()
-                # Wait until clear at center angle
-                while True:
-                    sensor.set_servo(90)
-                    if sensor.get_distance() > SAFE_DISTANCE:
-                        break
-                    time.sleep(0.1)
-                print("Path clear. Resuming.")
+                # --- Ask GPT what to do next ---
+                prompt = (
+                    f"I have an obstacle at {mind:.1f} cm in front of me. "
+                    "Should I turn left, right, or wait? "
+                    "Reply with one of: TURN_LEFT, TURN_RIGHT, WAIT."
+                )
+                cmd = gpt.ask_gpt(prompt)
+                print("GPT suggests:", cmd)
+                if "TURN_LEFT" in cmd:
+                    # Example: turn left in place
+                    motors.turn_left(DRIVE_SPEED)
+                    time.sleep(0.5)
+                    motors.stop()
+                elif "TURN_RIGHT" in cmd:
+                    motors.turn_right(DRIVE_SPEED)
+                    time.sleep(0.5)
+                    motors.stop()
+                else:
+                    time.sleep(1)
+                # Resume driving forward
                 motors.drive(DRIVE_SPEED)
-
             time.sleep(0.1)
+
     except KeyboardInterrupt:
-        print("Interrupted by user. Exiting...")
+        pass
     finally:
         motors.cleanup()
         sensor.cleanup()
-
-
-if __name__ == "__main__":
-    main()   
-      

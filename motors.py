@@ -49,8 +49,10 @@ def stop():
     """
     Stop both motors.
     """
-    pwm_left.ChangeDutyCycle(0)
-    pwm_right.ChangeDutyCycle(0)
+    if pwm_left:
+        pwm_left.ChangeDutyCycle(0)
+    if pwm_right:
+        pwm_right.ChangeDutyCycle(0)
 
 
 def cleanup():

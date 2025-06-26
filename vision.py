@@ -1,6 +1,7 @@
 # vision.py
 
 import cv2
+import time
 # Placeholder imports for inference
 # e.g., import tflite_runtime.interpreter as tflite
 
@@ -35,8 +36,9 @@ def detect_objects(frame):
 
 
 def main():
-    cap = init_camera()
+    cap = None
     try:
+        cap = init_camera()
         while True:
             frame = capture_frame(cap)
             boxes = detect_objects(frame)
@@ -45,6 +47,14 @@ def main():
             cv2.imshow("Vision", frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+            time.sleep(0.01)  # Slight delay to reduce CPU usage
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        cap.release()
+        if cap is not None:
+            cap.release()
         cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    main()
