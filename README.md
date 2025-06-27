@@ -77,4 +77,4 @@ pip install -r requirements.txt
 
 # Real Data Collecting
 
-(Add your data collection instructions here.)
+(Will add in future.)
