@@ -77,4 +77,4 @@ pip install -r requirements.txt
 
 # Real Data Collecting
 
-_ Will add the python script that see the object in the Rectangel and send the image to ChatGPT to see the response "
+_ Will add the python script that see the object in the Rectangel and send the image to ChatGPT to see the response " key
