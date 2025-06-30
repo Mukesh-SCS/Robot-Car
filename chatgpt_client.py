@@ -35,3 +35,10 @@ def ask_gpt(prompt: str, image_path: str = None) -> str:
         return resp.choices[0].message.content.strip()
     except openai.error.OpenAIError as e:
         return f"API error: {e}"
+    
+
+
+    #### import os, openai
+#####openai.api_key = os.getenv("OPENAI_API_KEY")
+
+    ### export OPENAI_API_KEY="sk-··········"
